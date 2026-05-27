@@ -2,15 +2,37 @@
 
 The Script Converter is a tool that converts LoadRunner Scripts into a NeoLoad project.
 
-## Installation as an Independent command line tool
+This is a community fork maintained at [fjarre/Script-Converter-LoadRunner-NeoLoad](https://github.com/fjarre/Script-Converter-LoadRunner-NeoLoad), modernised from the original [Krishnamurtyp/Script-Converter-LoadRunner-NeoLoad](https://github.com/Krishnamurtyp/Script-Converter-LoadRunner-NeoLoad) fork (itself derived from the now-archived [Neotys-Labs/Script-Converter](https://github.com/Neotys-Labs/Script-Converter)).
+
+Key changes vs. original:
+- `neoload-models` bumped from `2.0.6` to `3.3.6` (active Tricentis releases, May 2025)
+- Java 8 → Java 17 (LTS)
+- `jackson-databind` patched from `2.9.10.1` to `2.17.2` (CVE fix)
+- Old Neotys Maven repository removed; dependencies now resolved from Maven Central
+
+## Build from source
+
+### Requirements
+- **Java 17+** — [Download](https://adoptium.net/)
+- **Apache Maven 3.8+** — [Download](https://maven.apache.org/download.cgi)
+
+```bash
+git clone https://github.com/fjarre/Script-Converter-LoadRunner-NeoLoad.git
+cd Script-Converter-LoadRunner-NeoLoad
+mvn clean package -DskipTests
+```
+
+The distributable ZIP is produced at `launcher/target/script-converter-<version>.zip`.
+
+## Installation as a pre-built command line tool
 
 ### Download
 
-1. Download the [latest release](https://github.com/Neotys-Labs/Script-Converter/releases/latest)
+1. Download the [latest release](https://github.com/fjarre/Script-Converter-LoadRunner-NeoLoad/releases/latest)
 2. Unzip in the folder of your choice
 
 ### Requirement
-Java 8 must be installed on the machine used to run the Script Converter. ([Download Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)).
+Java 17 or later must be installed on the machine used to run the Script Converter. ([Download Java](https://adoptium.net/)).
 
 ## Usage
 
@@ -123,19 +145,20 @@ During the LoadRunner Scripts conversion, the tool creates two log files in the 
 
 ## NeoLoad compatibility and ChangeLog 
 
-| Script converter version | NeoLoad compatibility | ChangeLog |
-| ------------------------ | --------------------- | --------- |
-|Version 1.3.0 | Version 6.7+ | <ul><li>Ability to specify NeoLoad project version and NeoLoad product version.</li></ul>|
-|Version 1.2.2 | Version 6.6+ | <ul><li>Support of SAP GUI methods.</li><li>YAML file to declare mapping rules between LR method and NL custom action.</li><li>Support of method **lr_exit**.</li><li>Support of if/then/else statement.</li></ul>|
-|Version 1.1.3 | Version 6.6+ | <ul><li>Fix Bug 12108 - Configure logging to write file directly in output project location.</li><li>Support of HTTP parameters with empty value.</li><li>Extend support of web_custom_request method.</li></ul>|
-|Version 1.1.2 | Version 6.6+ | <ul><li>Support of method **web_add_header**.</li><li>Support of method **web_add_auto_header**.</li><li>Support of method **web_submit_form**.</li><li>Support of method **web_link**.</li></ul>|
-|Version 1.1.1 | Version 6.6+ | <ul><li>Support of method **web_reg_save_param_ex**.</li><li>Support of method **web_reg_save_param_regexp**.</li><li>Support of method **web_reg_save_param_xpath**.</li><li>Support of method **web_reg_save_param_json**.</li><li>Support of method **web_add_cookie**.</li><li>Support of method **lr_start_sub_transaction**.</li><li>Support of method **lr_end_sub_transaction**.</li><li>Support of method **web_cache_cleanup**.</li><li>Support of method **web_cleanup_cookies**.</li></ul>|
-|Version 1.1.0 | Version 6.6+ | Support **All** Search attribute (Headers or Body) for method **web_reg_save_param**.|
-|Version 1.0   | Version 6.4+ | Initial version.|
+| Script converter version | neoload-models | NeoLoad compatibility | ChangeLog |
+| ------------------------ | -------------- | --------------------- | --------- |
+|Version 1.3.3-SNAPSHOT (this fork) | 3.3.6 | Version 6.7+ | <ul><li>Bump neoload-models 2.0.6 → 3.3.6.</li><li>Java 8 → Java 17.</li><li>CVE fix: jackson-databind 2.9.10.1 → 2.17.2.</li><li>Remove obsolete Neotys Maven repository.</li><li>SAP GUI sample script added (`sample-scripts/SapGui_Login`).</li></ul>|
+|Version 1.3.0 | 2.0.6 | Version 6.7+ | <ul><li>Ability to specify NeoLoad project version and NeoLoad product version.</li></ul>|
+|Version 1.2.2 | 2.0.6 | Version 6.6+ | <ul><li>Support of SAP GUI methods.</li><li>YAML file to declare mapping rules between LR method and NL custom action.</li><li>Support of method **lr_exit**.</li><li>Support of if/then/else statement.</li></ul>|
+|Version 1.1.3 | 2.0.6 | Version 6.6+ | <ul><li>Fix Bug 12108 - Configure logging to write file directly in output project location.</li><li>Support of HTTP parameters with empty value.</li><li>Extend support of web_custom_request method.</li></ul>|
+|Version 1.1.2 | 2.0.6 | Version 6.6+ | <ul><li>Support of method **web_add_header**.</li><li>Support of method **web_add_auto_header**.</li><li>Support of method **web_submit_form**.</li><li>Support of method **web_link**.</li></ul>|
+|Version 1.1.1 | 2.0.6 | Version 6.6+ | <ul><li>Support of method **web_reg_save_param_ex**.</li><li>Support of method **web_reg_save_param_regexp**.</li><li>Support of method **web_reg_save_param_xpath**.</li><li>Support of method **web_reg_save_param_json**.</li><li>Support of method **web_add_cookie**.</li><li>Support of method **lr_start_sub_transaction**.</li><li>Support of method **lr_end_sub_transaction**.</li><li>Support of method **web_cache_cleanup**.</li><li>Support of method **web_cleanup_cookies**.</li></ul>|
+|Version 1.1.0 | 2.0.6 | Version 6.6+ | Support **All** Search attribute (Headers or Body) for method **web_reg_save_param**.|
+|Version 1.0   | 2.0.6 | Version 6.4+ | Initial version.|
 
 
 ## Feedbacks and bugs
-Open [an issue](https://github.com/Neotys-Labs/Script-Converter/issues) or contact [Neotys support](https://www.neotys.com/support/contact.html), and provide [log files](#logs) and/or LoadRunner Scripts.
+Open [an issue](https://github.com/fjarre/Script-Converter-LoadRunner-NeoLoad/issues) and provide [log files](#logs) and/or LoadRunner Scripts.
 
 ## How to contribute
 See [CONTRIBUTING.md](CONTRIBUTING.md) file.

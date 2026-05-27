@@ -14,11 +14,11 @@
 		<project.scm.id>git</project.scm.id>
 		<encoding>UTF-8</encoding>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<neoload-models.version>2.0.6</neoload-models.version>
-		<slf4j.version>1.7.25</slf4j.version>
-		<logback.classic.version>1.2.3</logback.classic.version>
-		<immutables.version>2.5.5</immutables.version>
-		<jacoco.version>0.7.7.201606060606</jacoco.version>
+		<neoload-models.version>3.3.6</neoload-models.version>
+		<slf4j.version>1.7.36</slf4j.version>
+		<logback.classic.version>1.2.13</logback.classic.version>
+		<immutables.version>2.9.3</immutables.version>
+		<jacoco.version>0.8.11</jacoco.version>
 	</properties>
 
 	<dependencyManagement>
@@ -100,15 +100,12 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.11.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>17</source>
+					<target>17</target>
 					<optimize>true</optimize>
 					<verbose>true</verbose>
-					<compilerArgs>
-						<arg>-XDignore.symbol.file</arg>
-					</compilerArgs>
 					<fork>true</fork>
 				</configuration>
 			</plugin>
@@ -159,20 +156,10 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>neotys-apis-releases</id>
-			<url>http://maven.neotys.com/content/groups/public</url>
-		</repository>
-	</repositories>
 	<distributionManagement>
 		<repository>
-			<id>neotys-public-releases</id>
-			<url>http://maven.neotys.com/content/repositories/releases</url>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/fjarre/Script-Converter-LoadRunner-NeoLoad</url>
 		</repository>
-		<snapshotRepository>
-			<id>neotys-public-snapshots</id>
-			<url>http://maven.neotys.com/content/repositories/snapshots</url>
-		</snapshotRepository>
 	</distributionManagement>
 </project>

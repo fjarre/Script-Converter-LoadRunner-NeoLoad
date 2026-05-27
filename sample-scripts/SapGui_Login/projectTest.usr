@@ -1,0 +1,26 @@
+[General]
+Type=Multi
+DefaultCfg=default.cfg
+NewFunctionHeader=1
+RunType=cci
+ActionLogicExt=action_logic
+LastActiveAction=Action
+MajorVersion=12
+MinorVersion=55
+ActiveTypes=QTWeb
+GenerateTypes=QTWeb
+AdditionalTypes=QTWeb
+DevelopTool=Vugen
+ParamLeftBrace=(
+ScriptLanguage=C
+[Actions]
+vuser_init=vuser_init.c
+Action=Action.c
+Login=Login.c
+Main=Main.c
+Logout=Logout.c
+vuser_end=vuser_end.c
+[RunLogicFiles]
+Default Profile=default.usp
+[VuserProfiles]
+Profiles=Default Profile
