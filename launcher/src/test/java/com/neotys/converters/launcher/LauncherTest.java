@@ -9,6 +9,9 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tests Launcher.run() directly — avoids SecurityManager (removed in Java 21).
+ */
 public class LauncherTest {
 
 	private static final File TARGET_DIR = Files.createTempDir();
