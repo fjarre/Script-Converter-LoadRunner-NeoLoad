@@ -2,15 +2,32 @@
 
 The Script Converter is a tool that converts LoadRunner Scripts into a NeoLoad project.
 
+> **Fork maintained by [fjarre/Script-Converter-LoadRunner-NeoLoad](https://github.com/fjarre/Script-Converter-LoadRunner-NeoLoad).**
+> The original `Neotys-Labs/Script-Converter` repository was removed by Tricentis. This fork modernises the tool and keeps it working with current versions of NeoLoad and Java.
+
+## Build from source
+
+### Requirements
+- **Java 17+** (Java 21 LTS recommended)
+- **Maven 3.8+**
+
+```bash
+git clone https://github.com/fjarre/Script-Converter-LoadRunner-NeoLoad.git
+cd Script-Converter-LoadRunner-NeoLoad
+mvn clean package -DskipTests
+```
+
+The distributable ZIP is produced at `launcher/target/script-converter-<version>.zip`.
+
 ## Installation as an Independent command line tool
 
 ### Download
 
-1. Download the [latest release](https://github.com/Neotys-Labs/Script-Converter/releases/latest)
+1. Build from source (see above) or download the [latest release](https://github.com/fjarre/Script-Converter-LoadRunner-NeoLoad/releases/latest)
 2. Unzip in the folder of your choice
 
 ### Requirement
-Java 8 must be installed on the machine used to run the Script Converter. ([Download Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)).
+**Java 17 or later** must be installed. ([Download Java](https://adoptium.net/)).
 
 ## Usage
 

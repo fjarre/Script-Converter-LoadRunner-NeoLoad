@@ -1,0 +1,24 @@
+[General]
+Type=Multi
+DefaultCfg=default.cfg
+ParameterFile=
+GlobalParameterFile=
+NewFunctionHeader=1
+RunType=cci
+ActionLogicExt=action_logic
+LastActiveAction=Action
+MajorVersion=12
+MinorVersion=55
+ActiveTypes=SAPGUI
+GenerateTypes=SAPGUI
+AdditionalTypes=SAPGUI
+DevelopTool=Vugen
+ScriptLanguage=C
+[Actions]
+vuser_init=vuser_init.c
+Action=Action.c
+vuser_end=vuser_end.c
+[RunLogicFiles]
+Default Profile=default.usp
+[VuserProfiles]
+Profiles=Default Profile

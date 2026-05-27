@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,19 +29,23 @@ public class Launcher {
 
 	private static final String PASSED = "Passed";
 	private static final String MIGRATION_LOG_FOLDER = "migration_logs";
-	private static final String UTF8_BOM = "\uFEFF";
+	private static final String UTF8_BOM = "﻿";
 	private static final String PROJECT_VERSION_OPTION = "projectVersion";
 	private static final String PRODUCT_VERSION_OPTION = "productVersion";
 
 	public static void main(final String[] args) {
+		System.exit(run(args));
+	}
 
+	/** Returns the process exit code; does not call System.exit(). Visible for testing. */
+	static int run(final String[] args) {
 		final CommandLineParser parser = new DefaultParser();
 		final CommandLine cmd;
 		final Options options = getCmdLineOptions();
 
 		if (Arrays.stream(args).anyMatch(Launcher::isHelpParameter)) {
 			printHelp(options);
-			System.exit(0);
+			return 0;
 		}
 
 		try {
@@ -50,15 +53,13 @@ public class Launcher {
 		} catch (MissingOptionException e) {
 			System.err.println("The following required parameters is missing in the command line: " + e.getMissingOptions().get(0).toString());
 			printHelp(options);
-			System.exit(1);
-			return;
+			return 1;
 		} catch (ParseException e) {
 			System.err.println("Command line error:" + e.toString());
 			printHelp(options);
-			System.exit(1);
-			return;
+			return 1;
 		}
-		
+
 		final boolean zipConfig = !cmd.hasOption('d');
 
 		final String sourceFolder = cmd.getOptionValue("source");
@@ -67,19 +68,18 @@ public class Launcher {
 
 		final String projectVersion = cmd.getOptionValue(PROJECT_VERSION_OPTION);
 		final String productVersion = cmd.getOptionValue(PRODUCT_VERSION_OPTION);
-		
-		final String nlProjectFolder = destFolder + File.separator + projectName;		
-		try{
+
+		final String nlProjectFolder = destFolder + File.separator + projectName;
+		try {
 			createProjectDirectory(nlProjectFolder);
 		} catch (final IOException ioe) {
 			System.err.println("Error creating project directory: " + ioe.toString());
-			System.exit(1);
-			return;
-		}		
-		
-		System.setProperty("logs.folder", nlProjectFolder + File.separator + MIGRATION_LOG_FOLDER);		
+			return 1;
+		}
+
+		System.setProperty("logs.folder", nlProjectFolder + File.separator + MIGRATION_LOG_FOLDER);
 		final Logger liveLogger = LoggerFactory.getLogger("LIVE");
-		
+
 		if (cmd.hasOption('l')) {
 			ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger("FUNCTIONAL");
 			final LoggerContext loggerContext = logger.getLoggerContext();
@@ -104,32 +104,30 @@ public class Launcher {
 			consoleAppender.start();
 			logger.addAppender(consoleAppender);
 		}
-		
+
 		String additionalCustomActionMappingContent = "";
-		if(cmd.hasOption('m')){
+		if (cmd.hasOption('m')) {
 			final String path = cmd.getOptionValue("m");
-			try{				
+			try {
 				additionalCustomActionMappingContent = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
-				if(additionalCustomActionMappingContent.startsWith(UTF8_BOM)){
+				if (additionalCustomActionMappingContent.startsWith(UTF8_BOM)) {
 					additionalCustomActionMappingContent = additionalCustomActionMappingContent.substring(UTF8_BOM.length());
 				} else {
 					liveLogger.error("Error while reading file " + path + ". Encoding is not UTF-8: " + additionalCustomActionMappingContent.substring(0, 4));
-					System.exit(1);
-					return;
+					return 1;
 				}
-			} catch (final Exception exception){
+			} catch (final Exception exception) {
 				liveLogger.error("Error while reading file " + path, exception);
-				System.exit(1);
-				return;
+				return 1;
 			}
-		}			
-		
-		final CmdEventListener cmdEventListener = new CmdEventListener(sourceFolder, destFolder, projectName);		
+		}
+
+		final CmdEventListener cmdEventListener = new CmdEventListener(sourceFolder, destFolder, projectName);
 		String status = PASSED;
 		final boolean passed;
 		try {
 			final LoadRunnerReader lrReader = new LoadRunnerReader(cmdEventListener, sourceFolder, projectName, additionalCustomActionMappingContent);
-			final Project project = lrReader.read();	
+			final Project project = lrReader.read();
 
 			final NeoLoadWriter nlWriter = new NeoLoadWriter(ImmutableProject.copyOf(project).withName(projectName),
 					nlProjectFolder, lrReader.getFileToCopy());
@@ -139,16 +137,14 @@ public class Launcher {
 			status = "Failed: " + e.getMessage();
 		} finally {
 			passed = PASSED.equals(status);
-			if(passed){
+			if (passed) {
 				cmdEventListener.printSummary();
 			}
 			if (cmd.hasOption('r')) {
 				cmdEventListener.generateJsonReport(ProjectType.LOAD_RUNNER, status);
-			}						
-			if(!passed){
-				System.exit(2);
 			}
 		}
+		return passed ? 0 : 2;
 	}
 
 	private static void printHelp(final Options options) {
@@ -174,14 +170,14 @@ public class Launcher {
 	private static boolean isHelpParameter(final String param) {
 		return "-h".equals(param) || "--help".equals(param);
 	}
-	
-	private static void createProjectDirectory(final String nlProjectFolder) throws IOException{
+
+	private static void createProjectDirectory(final String nlProjectFolder) throws IOException {
 		final File f = new File(nlProjectFolder);
-		if (!f.exists()) {			
+		if (!f.exists()) {
 			Files.createDirectories(Paths.get(nlProjectFolder));
-		} else if (f.isFile()) {			
+		} else if (f.isFile()) {
 			throw new IOException("The destination is not a directory, migration aborted.");
-		}		
+		}
 		final File logsFolder = new File(nlProjectFolder, MIGRATION_LOG_FOLDER);
 		logsFolder.mkdir();
 	}
